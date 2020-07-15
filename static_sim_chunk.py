@@ -21,7 +21,7 @@ ACTOR_LR_RATE = 0.0001
 CRITIC_LR_RATE = 0.001
 NUM_AGENTS = 8
 
-TRAIN_SEQ_LEN = 100
+TRAIN_SEQ_LEN = 300
 MODEL_SAVE_INTERVAL = 1000
 
 # New bitrate setting, 6 actions, correspongding to 240p, 360p, 480p, 720p, 1080p and 1440p(2k)
@@ -38,7 +38,6 @@ CHUNK_DURATION = 200.0
 CHUNK_IN_SEG = SEG_DURATION/CHUNK_DURATION
 CHUNK_SEG_RATIO = CHUNK_DURATION/SEG_DURATION
 # Initial buffer length on server side
-SERVER_START_UP_TH = 2000.0             # <========= TO BE MODIFIED. TEST WITH DIFFERENT VALUES
 # how user will start playing video (user buffer)
 USER_START_UP_TH = 2000.0
 
