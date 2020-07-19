@@ -97,7 +97,7 @@ def agent(agent_id, all_cooked_time, all_cooked_bw, net_params_queue, exp_queue)
     server = live_server.Live_Server(seg_duration=SEG_DURATION, chunk_duration=CHUNK_DURATION)
     server.test_reset()
 
-    with tf.Session() as sess, open(LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) +'_agent_' + str(agent_id), 'w') as log_file:
+    with tf.Session() as sess, open(LOG_FILE + '_agent_' + str(agent_id), 'w') as log_file:
         actor = a3c.ActorNetwork(sess,
                                  state_dim=[S_INFO, S_LEN], action_dim=A_DIM,
                                  learning_rate=ACTOR_LR_RATE, entropy_weight=INITIAL_ENTROPY_WEIGHT)
@@ -303,7 +303,7 @@ def central_agent(net_params_queues, exp_queues):
     assert len(net_params_queues) == NUM_AGENTS
     assert len(exp_queues) == NUM_AGENTS
 
-    logging.basicConfig(filename=LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) + '_central',
+    logging.basicConfig(filename=LOG_FILE + '_central',
                         filemode='w',
                         level=logging.INFO)
 
@@ -429,7 +429,7 @@ def central_agent(net_params_queues, exp_queues):
             if epoch % MODEL_SAVE_INTERVAL == 0:
                 # Save the neural net parameters to disk.
                 print("epoch is: " + str(epoch) + ", and going to save")
-                save_path = saver.save(sess, SUMMARY_DIR + "/nn_model_s_" + str(int(SERVER_START_UP_TH/MS_IN_S)) + '_ep_' + 
+                save_path = saver.save(sess, SUMMARY_DIR + "/nn_model_s_ep_" + 
                                        str(epoch) + ".ckpt")
                 logging.info("Model saved in file: " + save_path)
                 print('Epoch: ' + str(epoch) +
