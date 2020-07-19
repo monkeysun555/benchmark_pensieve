@@ -333,7 +333,7 @@ def central_agent(net_params_queues, exp_queues):
 
         epoch = STARTING_EPOCH
 
-        while epoch < TERMINAL_EPOCH:
+        while epoch <= TERMINAL_EPOCH:
             # Change entropy_weight according to epochs
             if epoch%10000 == 0:
                 entropy_weight = get_entropy_weight(epoch)
