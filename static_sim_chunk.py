@@ -48,7 +48,7 @@ STARTING_EPOCH = 0
 NN_MODEL = None
 # STARTING_EPOCH = 0
 # NN_MODEL = './results/nn_model_s_' + str(IF_NEW)  + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) + '_ep_' + str(STARTING_EPOCH) + '.ckpt'
-TERMINAL_EPOCH = 100000
+TERMINAL_EPOCH = 100001
 INITIAL_ENTROPY_WEIGHT = 5.0
 
 DEFAULT_ACTION = 0          # lowest bitrate

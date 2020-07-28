@@ -1,0 +1,173 @@
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:516: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:517: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:518: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:519: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:520: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorflow/python/framework/dtypes.py:525: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:541: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:542: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:543: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:544: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:545: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/scratch/ls3817/tflearn/lib/python3.6/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:550: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+WARNING:tensorflow:From /scratch/ls3817/tflearn/lib/python3.6/site-packages/tflearn/helpers/summarizer.py:9: The name tf.summary.merge is deprecated. Please use tf.compat.v1.summary.merge instead.
+
+WARNING:tensorflow:From /scratch/ls3817/tflearn/lib/python3.6/site-packages/tflearn/helpers/trainer.py:25: The name tf.summary.FileWriter is deprecated. Please use tf.compat.v1.summary.FileWriter instead.
+
+WARNING:tensorflow:From /scratch/ls3817/tflearn/lib/python3.6/site-packages/tflearn/collections.py:13: The name tf.GraphKeys is deprecated. Please use tf.compat.v1.GraphKeys instead.
+
+WARNING:tensorflow:From /scratch/ls3817/tflearn/lib/python3.6/site-packages/tflearn/config.py:123: The name tf.get_collection is deprecated. Please use tf.compat.v1.get_collection instead.
+
+WARNING:tensorflow:From /scratch/ls3817/tflearn/lib/python3.6/site-packages/tflearn/config.py:129: The name tf.add_to_collection is deprecated. Please use tf.compat.v1.add_to_collection instead.
+
+WARNING:tensorflow:From /scratch/ls3817/tflearn/lib/python3.6/site-packages/tflearn/config.py:131: The name tf.assign is deprecated. Please use tf.compat.v1.assign instead.
+
+Process Process-1:
+Traceback (most recent call last):
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "static_sim_chunk.py", line 306, in central_agent
+    logging.basicConfig(filename=LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) + '_central',
+NameError: name 'SERVER_START_UP_TH' is not defined
+WARNING:tensorflow:From static_sim_chunk.py:100: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-07-19 00:58:36.070444: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+WARNING:tensorflow:From static_sim_chunk.py:100: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-07-19 00:58:36.076508: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+WARNING:tensorflow:From static_sim_chunk.py:100: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-07-19 00:58:36.081373: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+WARNING:tensorflow:From static_sim_chunk.py:100: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-07-19 00:58:36.088648: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+WARNING:tensorflow:From static_sim_chunk.py:100: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-07-19 00:58:36.092152: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+WARNING:tensorflow:From static_sim_chunk.py:100: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-07-19 00:58:36.097801: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+WARNING:tensorflow:From static_sim_chunk.py:100: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-07-19 00:58:36.116802: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+WARNING:tensorflow:From static_sim_chunk.py:100: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2020-07-19 00:58:36.127891: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-07-19 00:58:36.804227: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2594155000 Hz
+2020-07-19 00:58:36.804282: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2594155000 Hz
+2020-07-19 00:58:36.804299: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2594155000 Hz
+2020-07-19 00:58:36.804302: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2594155000 Hz
+2020-07-19 00:58:36.804328: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2594155000 Hz
+2020-07-19 00:58:36.804353: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2594155000 Hz
+2020-07-19 00:58:36.804455: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2594155000 Hz
+2020-07-19 00:58:36.804709: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2594155000 Hz
+2020-07-19 00:58:36.805975: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5e5fed0 executing computations on platform Host. Devices:
+2020-07-19 00:58:36.805980: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5e5fed0 executing computations on platform Host. Devices:
+2020-07-19 00:58:36.805994: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5e5fed0 executing computations on platform Host. Devices:
+2020-07-19 00:58:36.806013: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5e5fed0 executing computations on platform Host. Devices:
+2020-07-19 00:58:36.805978: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5e5fed0 executing computations on platform Host. Devices:
+2020-07-19 00:58:36.806064: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+2020-07-19 00:58:36.806503: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5e5fed0 executing computations on platform Host. Devices:
+2020-07-19 00:58:36.806557: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5e5fed0 executing computations on platform Host. Devices:
+2020-07-19 00:58:36.806601: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+2020-07-19 00:58:36.806632: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+2020-07-19 00:58:36.806115: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+2020-07-19 00:58:36.806148: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+2020-07-19 00:58:36.806187: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+2020-07-19 00:58:36.807076: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+2020-07-19 00:58:36.807524: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5e5fed0 executing computations on platform Host. Devices:
+2020-07-19 00:58:36.807603: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+player initial finish
+Process Process-9:
+Traceback (most recent call last):
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "static_sim_chunk.py", line 100, in agent
+    with tf.Session() as sess, open(LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) +'_agent_' + str(agent_id), 'w') as log_file:
+NameError: name 'SERVER_START_UP_TH' is not defined
+player initial finish
+Process Process-4:
+Traceback (most recent call last):
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "static_sim_chunk.py", line 100, in agent
+    with tf.Session() as sess, open(LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) +'_agent_' + str(agent_id), 'w') as log_file:
+NameError: name 'SERVER_START_UP_TH' is not defined
+player initial finish
+Process Process-3:
+Traceback (most recent call last):
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "static_sim_chunk.py", line 100, in agent
+    with tf.Session() as sess, open(LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) +'_agent_' + str(agent_id), 'w') as log_file:
+NameError: name 'SERVER_START_UP_TH' is not defined
+player initial finish
+Process Process-5:
+Traceback (most recent call last):
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "static_sim_chunk.py", line 100, in agent
+    with tf.Session() as sess, open(LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) +'_agent_' + str(agent_id), 'w') as log_file:
+NameError: name 'SERVER_START_UP_TH' is not defined
+player initial finish
+Process Process-6:
+Traceback (most recent call last):
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "static_sim_chunk.py", line 100, in agent
+    with tf.Session() as sess, open(LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) +'_agent_' + str(agent_id), 'w') as log_file:
+NameError: name 'SERVER_START_UP_TH' is not defined
+player initial finish
+Process Process-7:
+Traceback (most recent call last):
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "static_sim_chunk.py", line 100, in agent
+    with tf.Session() as sess, open(LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) +'_agent_' + str(agent_id), 'w') as log_file:
+NameError: name 'SERVER_START_UP_TH' is not defined
+player initial finish
+Process Process-8:
+Traceback (most recent call last):
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "static_sim_chunk.py", line 100, in agent
+    with tf.Session() as sess, open(LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) +'_agent_' + str(agent_id), 'w') as log_file:
+NameError: name 'SERVER_START_UP_TH' is not defined
+player initial finish
+Process Process-2:
+Traceback (most recent call last):
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 258, in _bootstrap
+    self.run()
+  File "/share/apps/python3/3.6.3/intel/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "static_sim_chunk.py", line 100, in agent
+    with tf.Session() as sess, open(LOG_FILE + '_' + str(int(SERVER_START_UP_TH/MS_IN_S)) +'_agent_' + str(agent_id), 'w') as log_file:
+NameError: name 'SERVER_START_UP_TH' is not defined
