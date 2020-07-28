@@ -149,9 +149,37 @@ class Live_Server(object):
         self.time = next_available_time
         return time_interval 
 
-    def test_reset(self):
-        # Modified, the time is generated from outside (from main/testing file)
-        self.time = (self.myRandom.randint(SERVER_INIT_LAT_LOW, SERVER_INIT_LAT_HIGH)+np.random.random())*self.seg_duration 
+    def timeout_encoding_buffer(self):
+        temp_seg_index = self.next_delivery[0]
+        index_makeup = self.next_delivery[1]
+        idx_timeout = index_makeup
+        while index_makeup >= 0:
+            if index_makeup == 0:
+                self.chunks.insert(0, [temp_seg_index, index_makeup, \
+                [chunk_size[index_makeup] for chunk_size in self.current_seg_size], \
+                [np.sum(chunk_size) for chunk_size in self.current_seg_size]])  # trick: using current encoding setting
+            else:
+                self.chunks.insert(0, [temp_seg_index, index_makeup,
+                [chunk_size[index_makeup] for chunk_size in self.current_seg_size]])  
+            index_makeup -= 1
+            # print("makeup")
+            # print(self.chunks[0])
+        return idx_timeout
+
+    def check_take_action(self):
+        assert len(self.chunks) >= 1
+        if self.chunks[0][1] == 0:
+            return True
+        else:
+            return False
+
+    def reset(self, testing=False):
+        if testing:
+            self.time = (self.latency_random.randint(SERVER_INIT_LAT_LOW, \
+                    SERVER_INIT_LAT_HIGH)+self.latency_random.random())\
+                    *self.seg_duration 
+        else:
+            self.time = (self.myRandom.randint(SERVER_INIT_LAT_LOW, SERVER_INIT_LAT_HIGH)+np.random.random())*self.seg_duration 
         self.current_seg_idx = -1
         self.current_chunk_idx = 0
         self.chunks = []    # 1 for initial chunk, 0 for following chunks

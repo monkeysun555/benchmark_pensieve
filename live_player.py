@@ -1,4 +1,5 @@
 import numpy as np
+from random import Random
 
 RANDOM_SEED = 13
 BITRATE = [300.0, 500.0, 1000.0, 2000.0, 3000.0, 6000.0]
@@ -23,18 +24,22 @@ MS_IN_S = 1000.0    # in ms
 KB_IN_MB = 1000.0   # in ms
 
 class Live_Player(object):
-    def __init__(self, time_traces, throughput_traces, seg_duration, chunk_duration, start_up_th, freezing_tol, randomSeed = RANDOM_SEED):
-        np.random.seed(randomSeed)
+    def __init__(self, time_traces, throughput_traces, name_traces, seg_duration, chunk_duration, start_up_th, freezing_tol, testing=False, randomSeed = RANDOM_SEED):
+        self.myRandom = Random(randomSeed)
 
         self.time_traces = time_traces
         self.throughput_traces = throughput_traces
+        self.name_traces = name_traces
 
-        self.trace_idx = np.random.randint(len(self.throughput_traces))
+        if testing:
+            self.trace_idx = -1
+        else:
+            self.trace_idx = np.random.randint(len(self.throughput_traces))
         self.throughput_trace = self.throughput_traces[self.trace_idx]
         self.time_trace = self.time_traces[self.trace_idx]
-
+        self.name_trace = self.name_traces[self.trace_idx]
         self.playing_time = 0.0
-        self.time_idx = np.random.randint(1,len(self.time_trace))
+        self.time_idx = np.random.randint(1,len(self.time_trace)-1)
         self.last_trace_time = self.time_trace[self.time_idx-1] * MS_IN_S   # in ms
 
         self.seg_duration = seg_duration
@@ -58,7 +63,7 @@ class Live_Player(object):
         chunk_size = next_chunk_set[quality] # in Kbits not KBytes
         chunk_start_time = seg_idx * self.seg_duration + chunk_idx * self.chunk_duration
         # as mpd is based on prediction, there is noise
-        chunk_size = np.random.uniform(CHUNK_RANDOM_RATIO_LOW*chunk_size, CHUNK_RANDOM_RATIO_HIGH*chunk_size)
+        chunk_size = self.myRandom.uniform(CHUNK_RANDOM_RATIO_LOW*chunk_size, CHUNK_RANDOM_RATIO_HIGH*chunk_size)
         chunk_sent = 0.0    # in Kbits
         downloading_fraction = 0.0  # in ms
         freezing_fraction = 0.0 # in ms
@@ -66,7 +71,7 @@ class Live_Player(object):
         rtt = 0.0
         # Handle RTT 
         if take_action:
-            rtt = np.random.uniform(RTT_LOW, RTT_HIGH)  # in ms
+            rtt = self.myRandom.uniform(RTT_LOW, RTT_HIGH)  # in ms
             duration = self.time_trace[self.time_idx] * MS_IN_S - self.last_trace_time  # in ms
             if duration > rtt:
                 self.last_trace_time += rtt
@@ -81,18 +86,8 @@ class Live_Player(object):
                     temp_rtt -= duration
                     duration = self.time_trace[self.time_idx] * MS_IN_S - self.last_trace_time
                 self.last_trace_time += temp_rtt
-                
-                # Using new rtt processing
-                # temp_rtt = rtt - duration
-                # self.last_trace_time = self.time_trace[self.time_idx] * MS_IN_S   # in ms
-                # self.time_idx += 1
-                # if self.time_idx >= len(self.time_trace):
-                #   self.time_idx = 1
-                #   self.last_trace_time = 0.0
-                # self.last_trace_time += temp_rtt
                 assert self.last_trace_time < self.time_trace[self.time_idx] * MS_IN_S
             downloading_fraction += rtt
-            assert self.state == 1 or self.state == 0
             # Check whether during startup
             if self.state == 1:
                 self.playing_time += np.minimum(self.buffer, playing_speed*rtt)         # modified based on playing speed, adjusted, * speed
@@ -261,6 +256,14 @@ class Live_Player(object):
         self.state = 0
         self.playing_time = sync_time
 
+    def playing_time_back(self, index_gap):
+        assert self.buffer == 0.0
+        self.playing_time -= index_gap*self.chunk_duration
+        if not np.round(self.playing_time, 1)%self.seg_duration == 0.0:
+            print(self.playing_time)
+        assert np.round(self.playing_time, 1)%self.seg_duration == 0.0
+
+
     def adjust_start_up_th(self, new_start_up_th):
         self.start_up_th = new_start_up_th
         return
@@ -290,40 +293,24 @@ class Live_Player(object):
     #       sync = 1
     #   return sync
 
-    def reset(self, start_up_th):
-        self.trace_idx = np.random.randint(len(self.throughput_traces))
+    def reset(self, testing=False):
+        self.playing_time = 0.0
+        if testing:
+            self.trace_idx += 1
+            self.time_idx = 1
+        else:
+            self.trace_idx = np.random.randint(len(self.throughput_traces))
+            self.time_idx = np.random.randint(1,len(self.time_trace))
+
         self.throughput_trace = self.throughput_traces[self.trace_idx]
-        self.time_trace = self.time_traces[self.trace_idx]
-
-        self.time_idx = np.random.randint(1,len(self.time_trace))
+        self.time_trace = self.time_traces[self.trace_idx]           
+        self.name_trace = self.name_traces[self.trace_idx]
         self.last_trace_time = self.time_trace[self.time_idx-1] * MS_IN_S # in ms
-        # self.playing_time = self.time_trace[self.time_idx-1] # in ms
-        # self.real_time = 0.0
-        # self.real_frac = 0.0
-
         self.buffer = 0.0   # ms
         self.state = 0  # 0: start up.  1: traceing. 2: rebuffering
-        self.playing_time = 0.0
-        self.start_up_th = start_up_th
 
-    def test_reset(self, start_up_th, random_seed):
-        np.random.seed(random_seed)
-        self.playing_time = 0.0
-        self.trace_idx += 1
-        if self.trace_idx >= len(self.time_traces):
-            self.trace_idx = 0
-        self.throughput_trace = self.throughput_traces[self.trace_idx]
-        self.time_trace = self.time_traces[self.trace_idx]
-
-        self.time_idx = np.random.randint(1,len(self.time_trace))
-        self.last_trace_time = self.time_trace[self.time_idx-1] * MS_IN_S   # in ms
-        # self.playing_time = self.time_trace[self.time_idx-1] # in ms
-        # self.real_time = 0.0
-        # self.real_frac = 0.0
-
-        self.buffer = 0.0   # ms
-        self.state = 0  # 0: start up.  1: playing. 2: rebuffering
-        self.start_up_th = start_up_th
+    def get_player_trace_info(self):
+        return self.throughput_trace, self.time_trace, self.name_trace, self.time_idx
 
     def get_display_time(self):
         return self.playing_time

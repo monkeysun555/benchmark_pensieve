@@ -20,6 +20,8 @@ A_DIM = 6
 ACTOR_LR_RATE = 0.0001
 CRITIC_LR_RATE = 0.001
 NUM_AGENTS = 8
+if DEBUGGING:
+    NUM_AGENTS = 1
 
 TRAIN_SEQ_LEN = 300
 MODEL_SAVE_INTERVAL = 1000
@@ -74,8 +76,8 @@ NOR_WAIT = CHUNK_DURATION / MS_IN_S
 NOR_STATE = 2.0 # 0, 1, 2
 
 DATA_DIR = '../bw_traces/'
-SUMMARY_DIR = './results'
-LOG_FILE = './results/log'
+SUMMARY_DIR = './models'
+LOG_FILE = './models/log'
 # TEST_LOG_FOLDER = './test_results/'
 # TRAIN_TRACES = './traces/bandwidth/'
 
@@ -85,17 +87,18 @@ def ReLU(x):
 def lat_penalty(x):
     return 1.0/(1+math.exp(CONST-X_RATIO*x)) - 1.0/(1+math.exp(CONST))
 
-def agent(agent_id, all_cooked_time, all_cooked_bw, net_params_queue, exp_queue):
+def agent(agent_id, all_cooked_time, all_cooked_bw, all_name, net_params_queue, exp_queue):
 
     # Initial server and player
     # Modified, random initial time for server 
 
-    player = live_player.Live_Player(time_traces=all_cooked_time, throughput_traces=all_cooked_bw, 
+    player = live_player.Live_Player(time_traces=all_cooked_time, throughput_traces=all_cooked_bw,  name_traces = all_name,
                                         seg_duration=SEG_DURATION, chunk_duration=CHUNK_DURATION,
                                         start_up_th=USER_START_UP_TH, freezing_tol=USER_FREEZING_TOL,
                                         randomSeed=agent_id)
     server = live_server.Live_Server(seg_duration=SEG_DURATION, chunk_duration=CHUNK_DURATION)
-    server.test_reset()
+    server.reset()
+    player.reset()
 
     with tf.Session() as sess, open(LOG_FILE + '_agent_' + str(agent_id), 'w') as log_file:
         actor = a3c.ActorNetwork(sess,
@@ -111,7 +114,6 @@ def agent(agent_id, all_cooked_time, all_cooked_bw, net_params_queue, exp_queue)
         critic.set_network_params(critic_net_params)
 
         # For new trainning, using initial latency as the target
-        t_latency = server.get_time() - player.get_display_time()
         action_num = DEFAULT_ACTION
         last_bit_rate = action_num
         bit_rate = action_num
@@ -132,16 +134,6 @@ def agent(agent_id, all_cooked_time, all_cooked_bw, net_params_queue, exp_queue)
         latency = 0.0
 
         while True:
-            # get download chunk info
-            # Have to modify here, as we can get several chunks at the same time
-            # And the recording are jointly calculated. 
-            # assert len(server.chunks) >= 1
-
-            # Here, should get server next_delivery. Might be several chunks or a whole segment
-            # download_chunk_info = server.chunks[0]        
-            # download_chunk_size = download_chunk_info[2]
-            # download_chunk_idx = download_chunk_info[1]
-            # download_seg_idx = download_chunk_info[0]
             download_chunk_info = server.get_next_delivery()
             download_seg_idx = download_chunk_info[0]
             download_chunk_idx = download_chunk_info[1]
@@ -177,6 +169,10 @@ def agent(agent_id, all_cooked_time, all_cooked_bw, net_params_queue, exp_queue)
                 # Bit_rate will recalculated later, this is for reward calculation
                 bit_rate = 0
                 sync = 1
+                index_gap = server.timeout_encoding_buffer()
+                player.playing_time_back(index_gap)
+            else:
+                server.clean_next_delivery()
 
             if server.check_chunks_empty():
                 server_wait_time = server.wait()
@@ -197,10 +193,8 @@ def agent(agent_id, all_cooked_time, all_cooked_bw, net_params_queue, exp_queue)
             reward = ACTION_REWARD * log_bit_rate * chunk_number \
                     - REBUF_PENALTY * freezing / MS_IN_S \
                     - SMOOTH_PENALTY * np.abs(log_bit_rate - log_last_bit_rate) \
-                    - LONG_DELAY_PENALTY * lat_penalty(latency/ MS_IN_S) * chunk_number \
-                    - MISSING_PENALTY * missing_count
-                    # - UNNORMAL_PLAYING_PENALTY*(playing_speed-NORMAL_PLAYING)*download_duration/MS_IN_S
-            
+                    - LONG_DELAY_PENALTY * lat_penalty(latency/MS_IN_S) * chunk_number \
+                    - MISSING_PENALTY * missing_count            
             action_reward += reward
             # chech whether need to wait, using number of available segs
 
@@ -219,7 +213,7 @@ def agent(agent_id, all_cooked_time, all_cooked_bw, net_params_queue, exp_queue)
             state[3, -1] = server_wait_time / MS_IN_S/ NOR_WAIT         # time of waiting for server
             state[4, -1] = freezing / MS_IN_S / NOR_FREEZING            # current freezing time
             state[5, -1] = log_bit_rate / NOR_RATE                      # video bitrate
-            state[6, -1] = latency / NOR_BUFFER                                  # whether there is resync
+            state[6, -1] = latency / MS_IN_S / NOR_BUFFER                                  # whether there is resync
             state[7, -1] = player_state / NOR_STATE                     # state of player
             if DEBUGGING:
                 print(state)
@@ -288,9 +282,8 @@ def agent(agent_id, all_cooked_time, all_cooked_bw, net_params_queue, exp_queue)
                     video_terminate = 0
 
                     # Reset player and server
-                    player.reset(USER_START_UP_TH)
-                    server.test_reset()
-                    t_latency = server.get_time() - player.get_display_time()
+                    player.reset()
+                    server.reset()
                 else:
                     s_batch.append(state)
                     state = np.array(s_batch[-1], copy=True)
@@ -441,7 +434,6 @@ def central_agent(net_params_queues, exp_queues):
 
 def main():
     np.random.seed(RANDOM_SEED)
-
     # create result directory
     if not os.path.exists(SUMMARY_DIR):
         os.makedirs(SUMMARY_DIR)
@@ -459,7 +451,7 @@ def main():
                              args=(net_params_queues, exp_queues))
     coordinator.start()
 
-    all_cooked_time, all_cooked_bw, _ = load.loadBandwidth(DATA_DIR)        # For bw_traces
+    all_cooked_time, all_cooked_bw, all_name = load.loadBandwidth(DATA_DIR)        # For bw_traces
 
     # all_cooked_vp, _ = load.loadViewport()
     # print(all_cooked_vp)
@@ -468,7 +460,7 @@ def main():
     agents = []
     for i in range(NUM_AGENTS):
         agents.append(mp.Process(target=agent,
-                                 args=(i, all_cooked_time, all_cooked_bw, net_params_queues[i], exp_queues[i])))
+                                 args=(i, all_cooked_time, all_cooked_bw, all_name, net_params_queues[i], exp_queues[i])))
     for i in range(NUM_AGENTS):
         agents[i].start()
 
